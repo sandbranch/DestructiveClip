@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
-   <_name>Destructive Clip</_name>
-   <id>com.funnypolynomial.inkscape.extension.destructiveclip</id>
-       <dependency type="executable" location="extensions">destructiveclip.py</dependency>
-   <effect>
-               <object-type>path</object-type>
-                <effects-menu>
-                    <submenu _name="Modify Path"/>
-                </effects-menu>
-                <menu-tip>"Destructively" clip selected paths using the topmost as clipping path</menu-tip>                
-   </effect>
-   <script>
-       <command reldir="extensions" interpreter="python">destructiveclip.py</command>
-   </script>
+    <name>Destructive Clip</name>
+    <id>com.funnypolynomial.inkscape.extension.destructiveclip</id>
+    <param name="keep_outside" type="bool" gui-text="Keep objects that are entirely outside the clip">false</param>
+    <param name="delete_clip" type="bool" gui-text="Delete the clipping object afterwards">false</param>
+    <label>The topmost selected object clips the others. Lines and outlines are cut; filled shapes become their intersection with the clip.</label>
+    <effect>
+        <object-type>all</object-type>
+        <effects-menu>
+            <submenu name="Modify Path"/>
+        </effects-menu>
+        <menu-tip>"Destructively" clip the selected objects using the topmost as the clip</menu-tip>
+    </effect>
+    <script>
+        <command location="inx" interpreter="python">destructiveclip.py</command>
+    </script>
 </inkscape-extension>

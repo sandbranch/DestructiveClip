@@ -1,0 +1,15 @@
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+
+[tool.ruff.lint.per-file-ignores]
+# the tests and dev scripts put the repo on sys.path before importing it
+"tests/*" = ["E402"]
+# SVG sample drawings read better on one line each
+"tests/samples.py" = ["E501"]
+"dev/*" = ["E402"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

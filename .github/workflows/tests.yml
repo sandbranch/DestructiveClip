@@ -1,0 +1,33 @@
+name: tests
+on: [push, pull_request]
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      # inkex without PyGObject, which only its GUI helpers need
+      - run: pip install --no-deps inkex==1.4.0
+      # shapely only checks results in the tests; the extension does not need it
+      - run: pip install "lxml>=4.5,<7" numpy pillow pytest tinycss2 cssselect pyparsing packaging shapely ruff
+      - run: ruff format --check
+      - run: ruff check
+      - run: python -m pytest -q -rs
+  render:
+    # the key check: Inkscape renders the result like a real clip
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends inkscape dbus
+      - run: pip install --no-deps inkex==1.4.0
+      - run: pip install "lxml>=4.5,<7" numpy pillow pytest tinycss2 cssselect pyparsing packaging
+      - run: inkscape --version
+      - run: python -m pytest -q -rs tests/test_render.py
